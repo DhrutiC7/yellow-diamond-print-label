@@ -1,0 +1,27 @@
+{
+  "name": "yellow-diamond-print-label",
+  "version": "1.0.0",
+  "description": "Desktop app to print label",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ashishEronkan/yellow-diamond-print-label.git"
+  },
+  "author": "Ashish Sharma",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ashishEronkan/yellow-diamond-print-label/issues"
+  },
+  "homepage": "https://github.com/ashishEronkan/yellow-diamond-print-label#readme",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "electron": "^5.0.1",
+    "path": "^0.12.7",
+    "qrcode": "^1.3.3",
+    "request": "^2.88.0"
+  }
+}

@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Print Label</title>
+ 
+    <!-- <link rel="stylesheet" type="text/css" href="/home/ashish/source/yellow-diamond-print-label/node_modules/bootstrap/dist/css/bootstrap.min.css"> -->
+    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+
+
+  </head>
+  <style>
+    .controls{
+      position: fixed;
+      left: 25%;
+      top: 25%;
+      border:1px solid black;
+      padding:10px;
+      width:50%;
+    }
+    .head-class-1{
+       text-align: center;
+    }
+    </style>
+
+  <body> 
+      <div class="container-fluid controls">
+              <h3 class="head-class-1">Print Label</h3>
+                <div class="row">
+                  <div class="col-md-offset-3 col-md-6">
+                      <form>
+                            <div class="form-group">
+                              <!-- <label for="select-product-id">Product</label> -->
+                                  <select class="form-control" id="select-product-id">
+                                    <option value="none">Select Product</option>
+                                    <% productList.forEach((product) => { %>
+                                      <option value= <%=product.id%> ><%=product.name%></option>
+                                  <% }); %>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <!-- <label for="carton-count-id">No. of Cartons</label> -->
+                                <input type="number" class="form-control" placeholder="No. of cartons" id="carton-count-id"  min="1" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onpaste="return false"/>
+                            </div>
+                            <div class="form-group">
+                                <!-- <label for="generateLabel-id">Generate</label> -->
+                                <button type="button" class="btn btn-primary"  id="generateLabel-id"> Generate</button>
+                            </div>
+                      </form>
+                 </div>
+              </div>
+
+        </div>
+      
+      <!-- <script>
+            const {BrowserWindow} = require('electron').remote
+            const doRequest = require('request')
+            const ejs = require('ejs')
+
+            const generateBtn = document.getElementById('generateLabel');
+            var barcodeData;
+
+            var validateInput = function(){
+              let selectedProduct = document.getElementById('select-product-id').value;
+              let cartonCount = document.getElementById('carton-count-id').value;
+              
+              [undefined , null , '' , 'none'].forEach(val=>{
+                 if(selectedProduct==val || cartonCount == val){
+                    alert("select product and enter number of labels");
+                    return false;
+                 }
+              })
+
+              return true;
+            }
+
+            generateBtn.addEventListener('click', (event) => {
+                  if(!validateInput())return false;
+                  var url = 'http://local-api.eronkan.com:9001/component/warehouse-operations/form-data/83109b7b-a7fc-475a-aad5-6cb7e4665032/generateLabelData';
+                    var obj={
+                      'productId' : '686398c9-35fc-4c3f-b836-cc775fbcbb4b',
+                      'quantity' : 5
+                    }
+
+                  doRequest.post({url:url,form:obj}, 
+                    function(err,httpResponse,body){ 
+                          barcodeData = JSON.parse(httpResponse.body);
+                          let data = {currentData: barcodeData};
+                          let options = {root: __dirname};
+                        
+                          ejs.renderFile('barcode.ejs', data, options, function (err, str) {
+                                  if (err) {
+                                    console.log(err);
+                                  }
+                                  // Load the rendered HTML to the BrowserWindow.
+                                  let win = new BrowserWindow({width: 400, height: 275, webPreferences: {
+                                    nodeIntegration: true
+                                  }})
+
+                                  win.webContents.on('did-finish-load', () => {
+                                    win.webContents.send('message', 'This is a message from the renderer process to the second window.')
+                                  });
+
+                                  win.webContents.openDevTools();
+                                    win.on('close', () => {
+                                      win = null;
+                                  });
+
+                                  win.loadURL('data:text/html;charset=utf-8,' + encodeURI(str));
+                                  win.show();
+                          });
+                    })
+              })
+ 
+        </script> -->
+ 
+ <script>
+   require('/home/ashish/source/yellow-diamond-print-label/renderer.js')
+
+ </script>
+      </body>
+</html>

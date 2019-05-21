@@ -1,0 +1,75 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+		<style>
+      @page {
+        size: 100mm 50mm;
+       margin: 0mm 3.75mm 0mm 3.75mm;
+      }
+		</style>
+    <style>
+      .print-button{
+        margin: auto;
+       display: block;
+      }
+    </style>
+	</head>
+  <body onload='generate();'>
+    <div class="row" style="margin-top:20px" id="printLabel-block-id">
+        <div class="col-xs-offset-4 col-xs-4">
+          <button type="button" class="btn btn-primary print-button"  id="print-button-id">Print</button>
+        </div>
+      </div>
+
+		<div class="box box-default" style="text-align:left; margin-bottom:0px;padding-left:1px;box-shadow:none; margin-left:0px; margin-right:0px; margin-top:0px;">
+        <% currentData.data.forEach((carton) => { %>
+								<div class="row" style="padding-bottom:0px;margin-bottom:0px">
+												<div class="col-xs-7" style="padding-bottom:0px;margin-bottom:0px;margin-top:5px">
+																<h4 style="font-size:30px;text-align:center;padding-top:10px;"><b><%=carton.product_flavour%></b></h4>
+																<h4 style="font-size:22px;text-align:center;margin-top:15px"><b><%=carton.product_weight%>g X <%=carton.packets_per_carton%> pkts</b> </h4>
+																<h4 style="font-size:17px;text-align:center;font-weight:600;margin-top:15px">Rs.<%=carton.product_mrp%>/-&nbsp;&nbsp;&nbsp;<%=carton.label_date%></h4>
+										   </div>
+										   <div class="col-xs-5" style="padding:0px;margin-top:15px">
+														 <canvas style="width: 90%;margin:0px" id="barcode-<%- carton.id %>"></canvas>
+								</div>
+								</div>
+								<div style="page-break-before:always"></div>
+						<% }); %>
+    </div>
+    
+    <script>
+        ipc = require('electron').ipcRenderer;
+        QRCode = require('qrcode');
+        path = require('path');
+
+        ipc.on('message', (event, message) => console.log(message));
+
+        const printBtn = document.getElementById('print-button-id')
+        const printBlock = document.getElementById('printLabel-block-id')
+
+        var printBarcode = function(){
+            printBtn.style.display = "none";         
+            printBtn.removeEventListener('click', printBarcode);
+            window.print(); 
+        }
+        printBtn.addEventListener('click', printBarcode);
+
+        var renderCharts = function(currentData) {
+          currentData.data.forEach((carton) => {
+            QRCode.toCanvas(document.getElementById(`barcode-${carton.id}`), carton.id, function(err) {
+              if(err) console.error(err);
+            });
+          });
+        };
+        var generate = function() {
+          renderCharts(<%- JSON.stringify(currentData) %>);
+        };
+     
+    </script>
+</body>
+
+</html>
