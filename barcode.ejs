@@ -42,6 +42,7 @@
     </div>
     
     <script>
+       
         ipc = require('electron').ipcRenderer;
         QRCode = require('qrcode');
         path = require('path');
@@ -68,7 +69,7 @@
         var generate = function() {
           renderCharts(<%- JSON.stringify(currentData) %>);
         };
-     
+
     </script>
 </body>
 

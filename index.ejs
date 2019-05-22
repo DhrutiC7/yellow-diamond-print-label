@@ -29,7 +29,7 @@
       <div class="container-fluid controls">
               <h3 class="head-class-1">Print Label</h3>
                 <div class="row">
-                  <div class="col-md-offset-3 col-md-6">
+                  <div class="col-sm-offset-3 col-sm-6">
                       <form>
                             <div class="form-group">
                               <!-- <label for="select-product-id">Product</label> -->
@@ -54,71 +54,8 @@
 
         </div>
       
-      <!-- <script>
-            const {BrowserWindow} = require('electron').remote
-            const doRequest = require('request')
-            const ejs = require('ejs')
-
-            const generateBtn = document.getElementById('generateLabel');
-            var barcodeData;
-
-            var validateInput = function(){
-              let selectedProduct = document.getElementById('select-product-id').value;
-              let cartonCount = document.getElementById('carton-count-id').value;
-              
-              [undefined , null , '' , 'none'].forEach(val=>{
-                 if(selectedProduct==val || cartonCount == val){
-                    alert("select product and enter number of labels");
-                    return false;
-                 }
-              })
-
-              return true;
-            }
-
-            generateBtn.addEventListener('click', (event) => {
-                  if(!validateInput())return false;
-                  var url = 'http://local-api.eronkan.com:9001/component/warehouse-operations/form-data/83109b7b-a7fc-475a-aad5-6cb7e4665032/generateLabelData';
-                    var obj={
-                      'productId' : '686398c9-35fc-4c3f-b836-cc775fbcbb4b',
-                      'quantity' : 5
-                    }
-
-                  doRequest.post({url:url,form:obj}, 
-                    function(err,httpResponse,body){ 
-                          barcodeData = JSON.parse(httpResponse.body);
-                          let data = {currentData: barcodeData};
-                          let options = {root: __dirname};
-                        
-                          ejs.renderFile('barcode.ejs', data, options, function (err, str) {
-                                  if (err) {
-                                    console.log(err);
-                                  }
-                                  // Load the rendered HTML to the BrowserWindow.
-                                  let win = new BrowserWindow({width: 400, height: 275, webPreferences: {
-                                    nodeIntegration: true
-                                  }})
-
-                                  win.webContents.on('did-finish-load', () => {
-                                    win.webContents.send('message', 'This is a message from the renderer process to the second window.')
-                                  });
-
-                                  win.webContents.openDevTools();
-                                    win.on('close', () => {
-                                      win = null;
-                                  });
-
-                                  win.loadURL('data:text/html;charset=utf-8,' + encodeURI(str));
-                                  win.show();
-                          });
-                    })
-              })
- 
-        </script> -->
- 
- <script>
-   require('/home/ashish/source/yellow-diamond-print-label/renderer.js')
-
- </script>
+    <script>
+    <%- include('/renderer.js') %>
+    </script>
       </body>
 </html>

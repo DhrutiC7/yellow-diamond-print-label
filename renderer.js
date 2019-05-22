@@ -22,11 +22,12 @@ var validateInput = function(selectedProductId, cartonCount){
 }
 
 generateBtn.addEventListener('click', (event) => {
-      let selectedProductId = document.getElementById('select-product-id').value;
+  debugger;
+        let selectedProductId = document.getElementById('select-product-id').value;
       let cartonCount = document.getElementById('carton-count-id').value;
 
       if(!validateInput(selectedProductId, cartonCount))return false;
-      var url = 'http://local-api.eronkan.com:9001/component/warehouse-operations/form-data/83109b7b-a7fc-475a-aad5-6cb7e4665032/generateLabelData';
+      var url = 'https://stageapi.eronkan.com:443/component/warehouse-operations/form-data/83109b7b-a7fc-475a-aad5-6cb7e4665032/generateLabelData';
         var obj={
           'productId' : selectedProductId,
           'quantity' : cartonCount
@@ -37,10 +38,9 @@ generateBtn.addEventListener('click', (event) => {
               barcodeData = JSON.parse(httpResponse.body);
               let data = {currentData: barcodeData};
               let options = {root: __dirname};
-            
-              ejs.renderFile('barcode.ejs', data, options, function (err, str) {
+              ejs.renderFile(`./barcode.ejs`, data, options, function (err, str) {
                       if (err) {
-                        console.log(err);
+                         console.log(err);
                       }
                       else {
                           // Load the rendered HTML to the BrowserWindow.

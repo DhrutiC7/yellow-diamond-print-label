@@ -1,10 +1,12 @@
+
 ipc = require('electron').ipcRenderer;
 QRCode = require('qrcode');
 path = require('path');
 
 ipc.on('message', (event, message) => console.log(message));
 
-const printBtn = document.getElementById('printLabel')
+const printBtn = document.getElementById('print-button-id')
+const printBlock = document.getElementById('printLabel-block-id')
 
 var printBarcode = function(){
     printBtn.style.display = "none";         
@@ -23,3 +25,4 @@ var renderCharts = function(currentData) {
 var generate = function() {
   renderCharts(<%- JSON.stringify(currentData) %>);
 };
+     

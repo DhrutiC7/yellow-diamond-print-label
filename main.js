@@ -1,14 +1,17 @@
-const {app, BrowserWindow} = require('electron')
-const ejs = require('ejs')
-const doRequest = require('request')
+const {app, BrowserWindow, Menu} = require('electron');
+const ejs = require('ejs');
+const doRequest = require('request');
+ 
 let mainWindow
 
-function createWindow (productData) {
+process.env.NODE_ENV = 'development';
 
+function createWindow (productData) {
+  debugger;
   let data = {productList: productData};
   let options = {root: __dirname};
 
-  ejs.renderFile('index.ejs', data, options, function (err, str) {
+  ejs.renderFile(`${__dirname}/index.ejs`, data, options, function (err, str) {
             if (err) {
               console.log(err);
             }
@@ -34,25 +37,31 @@ function createWindow (productData) {
 
 
 function getProductData (){
+    var url = 'https://stageapi.eronkan.com:443/component/warehouse-operations/form-data/83109b7b-a7fc-475a-aad5-6cb7e4665032/getProductList';
+    doRequest.post({url:url,form:{}}, 
+      function(err,httpResponse,body){ 
+            if (err) {
+                console.log(err);
+            }
+            else {
+                productData = JSON.parse(httpResponse.body);
+                createWindow(productData);
+            }
 
-  var url = 'http://local-api.eronkan.com:9001/component/warehouse-operations/form-data/83109b7b-a7fc-475a-aad5-6cb7e4665032/getProductList';
+      })
+}
 
-doRequest.post({url:url,form:{}}, 
-  function(err,httpResponse,body){ 
-        if (err) {
-            console.log(err);
-        }
-        else {
-            productData = JSON.parse(httpResponse.body);
-            createWindow(productData);
-        }
+function initialiseApp(){
 
-   })
+    if(process.env.NODE_ENV == 'production'){
+        const mainMenu = Menu.buildFromTemplate([]);
+        Menu.setApplicationMenu(mainMenu);
+    }
+    getProductData();
 }
 
 
-
-app.on('ready', getProductData)
+app.on('ready', initialiseApp)
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -64,6 +73,6 @@ app.on('window-all-closed', function () {
 app.on('activate', function () {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) getProductData()
+  if (mainWindow === null) initialiseApp()
 })
 
