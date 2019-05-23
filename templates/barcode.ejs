@@ -1,8 +1,6 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-
     	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 		<style>
@@ -42,34 +40,7 @@
     </div>
     
     <script>
-       
-        ipc = require('electron').ipcRenderer;
-        QRCode = require('qrcode');
-        path = require('path');
-
-        ipc.on('message', (event, message) => console.log(message));
-
-        const printBtn = document.getElementById('print-button-id')
-        const printBlock = document.getElementById('printLabel-block-id')
-
-        var printBarcode = function(){
-            printBtn.style.display = "none";         
-            printBtn.removeEventListener('click', printBarcode);
-            window.print(); 
-        }
-        printBtn.addEventListener('click', printBarcode);
-
-        var renderCharts = function(currentData) {
-          currentData.data.forEach((carton) => {
-            QRCode.toCanvas(document.getElementById(`barcode-${carton.id}`), carton.id, function(err) {
-              if(err) console.error(err);
-            });
-          });
-        };
-        var generate = function() {
-          renderCharts(<%- JSON.stringify(currentData) %>);
-        };
-
+       <%- include('/JS/barcode.js') %>
     </script>
 </body>
 

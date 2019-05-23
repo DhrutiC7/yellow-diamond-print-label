@@ -1,17 +1,16 @@
 const {app, BrowserWindow, Menu} = require('electron');
 const ejs = require('ejs');
 const doRequest = require('request');
- 
 let mainWindow
 
-process.env.NODE_ENV = 'development';
+process.env.NODE_ENV = 'production';
 
 function createWindow (productData) {
   debugger;
   let data = {productList: productData};
   let options = {root: __dirname};
 
-  ejs.renderFile(`${__dirname}/index.ejs`, data, options, function (err, str) {
+  ejs.renderFile(`${__dirname}/templates/index.ejs`, data, options, function (err, str) {
             if (err) {
               console.log(err);
             }
@@ -23,6 +22,10 @@ function createWindow (productData) {
                     nodeIntegration: true
                   }
                 })
+
+                mainWindow.webContents.on('did-finish-load', () => {
+                  mainWindow.webContents.send('configData', {'appRoot' : options.root})
+                });
 
                 mainWindow.on('close', () => {
                   mainWindow = null;
@@ -44,8 +47,14 @@ function getProductData (){
                 console.log(err);
             }
             else {
-                productData = JSON.parse(httpResponse.body);
-                createWindow(productData);
+                try{
+                  productData = JSON.parse(httpResponse.body);
+                  createWindow(productData);
+                }
+                catch(ex){
+                  console.log(ex);
+                  createWindow([]);
+                }
             }
 
       })

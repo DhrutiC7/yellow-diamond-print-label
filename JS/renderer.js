@@ -1,6 +1,13 @@
-const {BrowserWindow} = require('electron').remote
-const doRequest = require('request')
-const ejs = require('ejs')
+const {BrowserWindow} = require('electron').remote;
+const ipc = require('electron').ipcRenderer;
+const doRequest = require('request');
+const ejs = require('ejs');
+
+var appRoot;
+
+ipc.on('configData', (event, data) => {
+   appRoot = data.appRoot;
+});
 
 const generateBtn = document.getElementById('generateLabel-id');
 var barcodeData;
@@ -22,7 +29,6 @@ var validateInput = function(selectedProductId, cartonCount){
 }
 
 generateBtn.addEventListener('click', (event) => {
-  debugger;
         let selectedProductId = document.getElementById('select-product-id').value;
       let cartonCount = document.getElementById('carton-count-id').value;
 
@@ -33,12 +39,14 @@ generateBtn.addEventListener('click', (event) => {
           'quantity' : cartonCount
         }
 
+        generateBtn.disabled = true;
+
       doRequest.post({url:url,form:obj}, 
         function(err,httpResponse,body){ 
               barcodeData = JSON.parse(httpResponse.body);
               let data = {currentData: barcodeData};
-              let options = {root: __dirname};
-              ejs.renderFile(`./barcode.ejs`, data, options, function (err, str) {
+              let options = {root: appRoot};
+              ejs.renderFile(`${appRoot}/templates/barcode.ejs`, data, options, function (err, str) {
                       if (err) {
                          console.log(err);
                       }
@@ -49,7 +57,7 @@ generateBtn.addEventListener('click', (event) => {
                           }})
 
                           win.webContents.on('did-finish-load', () => {
-                            win.webContents.send('message', 'This is a message from the renderer process to the second window.')
+                            win.show();
                           });
 
                             win.on('close', () => {
@@ -57,8 +65,8 @@ generateBtn.addEventListener('click', (event) => {
                           });
 
                           win.loadURL('data:text/html;charset=utf-8,' + encodeURI(str));
-                          win.show();
                     }
+                    generateBtn.disabled = false;
               });
         })
   })
