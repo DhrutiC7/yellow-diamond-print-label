@@ -1,4 +1,4 @@
-const {BrowserWindow} = require('electron').remote;
+const {BrowserWindow, dialog} = require('electron').remote;
 const ipc = require('electron').ipcRenderer;
 const doRequest = require('request');
 const ejs = require('ejs');
@@ -20,7 +20,7 @@ var validateInput = function(selectedProductId, cartonCount){
     for(let idx = 0;idx < checkArr.length;idx++){
         let val = checkArr[idx];
         if(selectedProductId==val || cartonCount == val){
-          alert("select product and enter number of labels");
+          dialog.showErrorBox("error","select product and enter number of labels");
           return false;
       }
     }
