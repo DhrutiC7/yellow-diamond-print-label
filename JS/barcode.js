@@ -2,9 +2,10 @@ QRCode = require('qrcode');
 path = require('path');
 
 
-const printBtn = document.getElementById('print-button-id')
+const printBtn = document.getElementById('print-button-id');
+const printBlock = document.getElementById('printLabel-block-id');
 var printBarcode = function(){
-    printBtn.style.display = "none";         
+    printBlock.style.display = "none";         
     printBtn.removeEventListener('click', printBarcode);
     window.print(); 
 }

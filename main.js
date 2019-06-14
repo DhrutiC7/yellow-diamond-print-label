@@ -40,7 +40,7 @@ function createWindow (productData) {
 
 
 function getProductData (){
-    var url = 'https://stageapi.eronkan.com:443/component/warehouse-operations/form-data/83109b7b-a7fc-475a-aad5-6cb7e4665032/getProductList';
+    var url = 'https://prataap-api.eronkan.com/component/warehouse-operations/form-data/83109b7b-a7fc-475a-aad5-6cb7e4665032/getProductList';
     doRequest.post({url:url,form:{}}, 
       function(err,httpResponse,body){ 
             if (err) {
@@ -49,11 +49,11 @@ function getProductData (){
             else {
                 try{
                   productData = JSON.parse(httpResponse.body);
-                  createWindow(productData);
+                  if(!mainWindow)createWindow(productData);
                 }
                 catch(ex){
                   console.log(ex);
-                  createWindow([]);
+                  if(!mainWindow)createWindow([]);
                 }
             }
 
@@ -66,7 +66,7 @@ function initialiseApp(){
         const mainMenu = Menu.buildFromTemplate([]);
         Menu.setApplicationMenu(mainMenu);
     }
-    getProductData();
+     getProductData();
 }
 
 
