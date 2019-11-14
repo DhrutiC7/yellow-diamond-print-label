@@ -32,7 +32,7 @@
                                   <select class="form-control" id="select-product-id">
                                     <option value="none">Select Product</option>
                                     <% productList.forEach((product) => { %>
-                                      <option value= <%=product.id%> ><%=product.name%></option>
+                                      <option value= <%=product.id%> ><%=product.name%> X <%=product.packets_per_carton%> pkts</option>
                                   <% }); %>
                                 </select>
                             </div>
