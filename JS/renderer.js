@@ -45,12 +45,12 @@ var refreshControls = function(status){
 }
 
 generateBtn.addEventListener('click', (event) => {
-        let selectedProductId = document.getElementById('select-product-id').value;
+      let selectedProductId = document.getElementById('select-product-id').value;
       let cartonCount = document.getElementById('carton-count-id').value;
 
       if(!validateInput(selectedProductId, cartonCount))return false;
       var url = 'https://prataap-api.eronkan.com/component/warehouse-operations/form-data/83109b7b-a7fc-475a-aad5-6cb7e4665032/generateLabelData';
-        var obj={
+      var obj={
           'productId' : selectedProductId,
           'quantity' : cartonCount
         }
@@ -89,7 +89,6 @@ generateBtn.addEventListener('click', (event) => {
 
 
 refreshBtn.addEventListener('click', (event) => {
-  refreshControls(true);
   var url = 'https://prataap-api.eronkan.com/component/warehouse-operations/form-data/83109b7b-a7fc-475a-aad5-6cb7e4665032/getProductList';
   doRequest.post({url:url,form:{}}, 
       function(err,httpResponse,body){ 
@@ -98,9 +97,14 @@ refreshBtn.addEventListener('click', (event) => {
             }
             else {
                 try{
+                  let productSelect = document.getElementById('select-product-id');
+                  let cartonNumber = document.getElementById('carton-count-id');
+                  if(productSelect)
+                    productSelect.value = 'none';
+                  if(cartonNumber)
+                    cartonNumber.value = '';
                   productData = JSON.parse(httpResponse.body);
                   setProductList(productData);
-                  refreshControls(false);
                 }
                 catch(ex){
                   console.log(ex);
